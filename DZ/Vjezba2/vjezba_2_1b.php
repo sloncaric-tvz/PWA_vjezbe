@@ -1,5 +1,5 @@
 <?php
-$naslov = "PHP dokument - vježba 1c";
+$naslov = "PHP dokument - vježba 1b";
 $autor = "Stjepko Lončarić";
 $opis = "Ovo je stranica izrađena kao drugi dio zadatka za vježbu.";
 $linkInfo_href = "https://en.wikipedia.org/wiki/PHP";
