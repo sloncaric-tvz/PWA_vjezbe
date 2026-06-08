@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unos</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Naslov</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Politika</a>
+            <a href="#">Sport</a>
+            <a href="#">Administracija</a>
+            <a href="unos.php">Unos</a>
+        </nav>
+    </header>
+
+    <main class="form-main">
+
+        <div class="form-container">
+            <form action="skripta.php" method="POST" enctype="multipart/form-data">
+                <div class="form-item">
+                    <label for="naslov">Naslov:</label>
+                    <div class="form-field">
+                        <input type="text" name="naslov" id="naslov" class="form-field-textual" autofocus required>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label for="sazetak">Kratki sadržaj (50 znakova)</label>
+                    <div class="form-field">
+                        <textarea name="sazetak" id="sazetak" cols="30" rows="2" maxlength="50" class="form-field-textual" required></textarea>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label for="sadrzaj">Sadržaj:</label>
+                    <div class="form-field">
+                        <textarea name="sadrzaj" id="sadrzaj" cols="30" rows="10" class="form-field-textual" required></textarea>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label for="slika">Slika: </label>
+                    <div class="form-field">
+                        <input type="file" accept="image/jpeg,image/gif,image/png" class="input-text" name="slika" id="slika" />
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label for="kategorija">Kategorija vijesti</label>
+                    <div class="form-field">
+                        <select name="kategorija" id="kategorija" class="form-field-textual" required>
+                            <option value="sport">Sport</option>
+                            <option value="kultura">Politika</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item form-item-checkbox">
+                    <label for="arhiv">Prikaži na stranici:</label>
+                    <div class="form-field">
+                        <input type="checkbox" name="arhiv" id="arhiv">
+                    </div>
+                </div>
+                <div class="form-item form-actions">
+                    <button type="reset" value="Poništi">Poništi</button>
+                    <button type="submit" value="Prihvati">Prihvati</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <div>Stjepko Lončarić &copy;2026</div>
+        <div><i class="fa fa-envelope"></i>sloncaric@tvz.hr</div>
+    </footer>
+</body>
+
+</html>
