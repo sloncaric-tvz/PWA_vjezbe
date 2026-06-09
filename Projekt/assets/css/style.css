@@ -3,6 +3,7 @@
     --content-background: #ffffff;
     --text-color: #171a1d;
     --accent-color: #066a96;
+    --muted-accent-color: #6f98aa;
     --rule-color: #1d252b;
     --hover-background: #1d252b;
     --content-width: 1000px;
@@ -307,6 +308,96 @@ textarea.form-field-textual {
     outline-offset: 3px;
 }
 
+/* prikaz članka -------------------------------------------------- */
+.article-main {
+    padding-top: clamp(46px, 7vw, 78px);
+}
+
+.article-detail {
+    width: min(100%, 760px);
+    margin: 0 auto;
+    padding: 0;
+}
+
+.article-detail div {
+    width: auto;
+    overflow: visible;
+    background: transparent;
+}
+
+.article-info {
+    margin-bottom: 0;
+}
+
+.article-info .category {
+    margin: 0 0 12px;
+    color: var(--muted-accent-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.article-info .title {
+    margin: 0 0 18px;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+}
+
+.article-info .summary {
+    max-width: 62ch;
+    margin: 0;
+    font-size: clamp(1.05rem, 2vw, 1.22rem);
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.article-detail .summary-rule {
+    display: block;
+    width: 5%;
+    height: 2px;
+    margin: 24px 0;
+    background: var(--muted-accent-color);
+}
+
+.article-image {
+    margin: 0 0 34px;
+}
+
+.article-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.article-image figcaption {
+    margin-top: 9px;
+    color: var(--muted-accent-color);
+    font-size: 0.88rem;
+    font-style: italic;
+    line-height: 1.35;
+}
+
+.article-content {
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.article-content p {
+    margin: 0;
+}
+
+.article-error,
+.article-empty {
+    width: min(100%, 760px);
+    margin: 0 auto;
+    color: var(--muted-accent-color);
+    font-style: italic;
+}
+
 /* Responsive ---------------------------------------------------------------------------------------------*/
 @media (max-width: 820px) {
     header h1 {
@@ -388,8 +479,6 @@ textarea.form-field-textual {
         margin-top: 10px;
     }
 
-}
-@media (max-width: 560px) {
     .form-container {
         padding: 20px 16px;
         box-shadow: none;
@@ -401,5 +490,17 @@ textarea.form-field-textual {
 
     .form-actions button {
         width: 100%;
+    }
+
+    .article-info .title {
+        letter-spacing: -0.025em;
+    }
+
+    .article-detail .summary-rule {
+        margin: 20px 0;
+    }
+
+    .article-image {
+        margin-bottom: 28px;
     }
 }
