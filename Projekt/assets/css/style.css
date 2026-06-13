@@ -52,6 +52,11 @@ header h1 {
     letter-spacing: -0.04em;
 }
 
+header a {
+    text-decoration: none;
+    color: inherit;
+}
+
 nav {
     max-width: var(--content-width);
     margin: 0 auto;
@@ -162,15 +167,24 @@ article div {
 
 article img {
     width: 100%;
-    height: auto;
+    height: 200px;
     object-fit: cover;
 }
 
 article h3 {
     margin: 13px 0 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     line-height: 1.18;
+}
+
+article p {
+    font-size: 1rem;
+}
+
+article .date {
+    font-size: 0.80rem;
+    color: var(--muted-accent-color)
 }
 
 footer {
@@ -294,6 +308,11 @@ textarea.form-field-textual {
 .form-actions button[type="reset"] {
     background: #ffffff;
     color: var(--rule-color);
+}
+
+.form-actions .delete-button {
+    background-color: red;
+    border-color: red;
 }
 
 .form-actions button:hover,
