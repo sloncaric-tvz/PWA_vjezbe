@@ -10,23 +10,31 @@ require_once 'header.php';
             $katId = $kategorija['id'];
             $query_vijesti = "SELECT id, naslov, sazetak, slika_url, datum
                             FROM vijesti
-                            WHERE idKategorija=$katId
+                            WHERE idKategorija=?
                             AND arhiva = 0
                             ORDER BY datum DESC
                             LIMIT 3";
-            $result_vijesti = mysqli_query($dbc, $query_vijesti); ?>
+            $stmt = mysqli_stmt_init($dbc);
+            if(mysqli_stmt_prepare($stmt, $query_vijesti)){
+                mysqli_stmt_bind_param($stmt, 'i', $katId);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+            }
+            mysqli_stmt_bind_result($stmt, $id, $naslov, $sazetak, $slika_url, $datum);
+            ?>
             <hr>
                 <section>
                     <h2><?= $kategorija['ime']; ?></h2>
-                    <?php while($vijest = mysqli_fetch_array($result_vijesti)): ?>
-                        <a href="clanak.php?id=<?= $vijest['id']; ?>">
+                    <?php 
+                    while(mysqli_stmt_fetch($stmt)): ?>
+                        <a href="clanak.php?id=<?= $id; ?>">
                             <article>
                                 <div>
-                                    <img src="<?= $vijest['slika_url']; ?>" alt="slika za clanak">
+                                    <img src="<?= $slika_url; ?>" alt="slika za clanak">
                                 </div>
-                                <h3><?= $vijest['naslov']; ?></h3>
-                                <p><?= $vijest['sazetak']; ?></p>
-                                <p class="date"><?= $vijest['datum']; ?></p>
+                                <h3><?= $naslov; ?></h3>
+                                <p><?= $sazetak; ?></p>
+                                <p class="date"><?= $datum; ?></p>
                             </article>
                         </a>
                     <?php endwhile; ?>

@@ -33,8 +33,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
     }
     $query_insert = "INSERT INTO `vijesti` (`naslov`, `sazetak`, `tekst`, `slika_url`, `idKategorija`, `arhiva`)
-        VALUES ('$naslov', '$sazetak', '$sadrzaj', '$image_path', $kategorija, $arhiviraj);";
-    mysqli_query($dbc, $query_insert) or die('Error querying database.');
+        VALUES (?, ?, ?, ?, ?, ?);";
+    $stmt_insert = mysqli_stmt_init($dbc);
+
+    if(mysqli_stmt_prepare($stmt_insert, $query_insert)){
+        mysqli_stmt_bind_param($stmt_insert, 'ssssii', $naslov, $sazetak, $sadrzaj, $image_path, $kategorija, $arhiviraj);
+        mysqli_stmt_execute($stmt_insert);
+    }
     $idClanak = mysqli_query($dbc, "SELECT LAST_INSERT_ID() AS id;");
     $idClanak = mysqli_fetch_array($idClanak)['id'];
     header("Location: clanak.php?id=$idClanak");

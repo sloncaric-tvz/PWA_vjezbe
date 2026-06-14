@@ -374,6 +374,10 @@ textarea.form-field-textual {
     line-height: 1.35;
 }
 
+.article-info .date {
+    text-align: right;
+}
+
 .article-detail .summary-rule {
     display: block;
     width: 5%;

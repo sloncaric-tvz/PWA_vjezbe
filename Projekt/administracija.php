@@ -10,10 +10,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $sazetak = trim($_POST['sazetak'] ?? '');
         $kategorija = trim($_POST['kategorija'] ?? '');
         $arhiva = isset($_POST['arhiv']) ? 1 : 0;
+
         if($_FILES['slika']['name'] === ''){ //dohvaća staru sliku iz baze ako nije odabrana nova
-            $stara_slika = mysqli_fetch_array(mysqli_query($dbc, "SELECT slika_url FROM vijesti WHERE id = $id;"))['slika_url'];
+            $stmt_slika = mysqli_stmt_init($dbc);
+            if(mysqli_stmt_prepare($stmt_slika, "SELECT slika_url FROM vijesti WHERE id = ?;")){
+                mysqli_stmt_bind_param($stmt_slika, 'i', $id);
+                mysqli_stmt_execute($stmt_slika);
+                mysqli_stmt_store_result($stmt_slika);
+            }
+            mysqli_stmt_bind_result($stmt_slika, $stara_slika);
+            mysqli_stmt_fetch($stmt_slika);
         }
-        elseif (isset($_FILES['slika']) && $_FILES['slika']['error'] === UPLOAD_ERR_OK) {
+        elseif (isset($_FILES['slika']) && $_FILES['slika']['error'] === UPLOAD_ERR_OK) { //dodaje novu sliku
             $img_dir = 'assets/img/';
 
             if (!is_dir($img_dir)) {
@@ -39,23 +47,49 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         if(isset($stara_slika)){
             $image_path = $stara_slika;
         }
-        $update_query = "UPDATE vijesti SET naslov='$naslov', 
-                                        sazetak='$sazetak', 
-                                        tekst='$sadrzaj', 
-                                        idKategorija='$kategorija', 
-                                        arhiva='$arhiva', 
-                                        slika_url='$image_path'
-                                        WHERE id=$id;";
-        mysqli_query($dbc, $update_query);
-    } elseif (isset($_POST['delete'])){
-        $delete_query = "DELETE FROM vijesti WHERE id=$id;";
-        mysqli_query($dbc, $delete_query);
-    } elseif (isset($_POST['new_category'])){
-        $new_category_query = "INSERT INTO kategorije (ime) VALUES ('". $_POST['ime_kategorije'] ."');";
-        mysqli_query($dbc, $new_category_query);
-    } elseif (isset($_POST['delete_category'])){
-        $delete_category_query = "DELETE FROM kategorije WHERE ime = '". $_POST['ime_kategorije'] ."';";
-        mysqli_query($dbc, $delete_category_query);
+        $update_query = "UPDATE vijesti SET naslov=?, 
+                                        sazetak=?, 
+                                        tekst=?, 
+                                        idKategorija=?, 
+                                        arhiva=?, 
+                                        slika_url=?
+                                        WHERE id=?;";
+
+        $stmt_update = mysqli_stmt_init($dbc);
+        if(mysqli_stmt_prepare($stmt_update, $update_query)){
+            mysqli_stmt_bind_param($stmt_update, 'sssiisi', $naslov, $sazetak, $sadrzaj, $kategorija, $arhiva, $image_path, $id);
+            mysqli_stmt_execute($stmt_update);
+        }
+
+    } elseif (isset($_POST['delete'])){ //obriši clanak
+        $delete_query = "DELETE FROM vijesti WHERE id=?;";
+
+        $stmt_delete = mysqli_stmt_init($dbc);
+        if(mysqli_stmt_prepare($stmt_delete, $delete_query)){
+            mysqli_stmt_bind_param($stmt_delete, 'i', $id);
+            mysqli_stmt_execute($stmt_delete);
+        }
+
+    } elseif (isset($_POST['new_category'])){ //dodaj novu kategoriju
+
+        $nova_kat = $_POST['ime_kategorije'];
+        $new_category_query = "INSERT INTO kategorije (ime) VALUES (?);";
+
+        $stmt_new_category = mysqli_stmt_init($dbc);
+        if(mysqli_stmt_prepare($stmt_new_category, $new_category_query)){
+            mysqli_stmt_bind_param($stmt_new_category, 's', $nova_kat);
+            mysqli_stmt_execute($stmt_new_category);
+        }
+
+    } elseif (isset($_POST['delete_category'])){ //obrisi kategoriju
+        $obrisi_kat = $_POST['ime_kategorije'];
+        $delete_category_query = "DELETE FROM kategorije WHERE ime = ?;";
+
+        $stmt_delete_category = mysqli_stmt_init($dbc);
+        if(mysqli_stmt_prepare($stmt_delete_category, $delete_category_query)){
+            mysqli_stmt_bind_param($stmt_delete_category, 's', $obrisi_kat);
+            mysqli_stmt_execute($stmt_delete_category);
+        }
     }
     header('Location: administracija.php');
     
@@ -63,13 +97,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 $query = "SELECT id, ime FROM kategorije";
 $result_kat = mysqli_query($dbc, $query);
 
-if(isset($_GET['id'])){
+if(isset($_GET['id'])){ //pronađi odabranu vijest u bazi
     $id_vijest = $_GET['id'];
     $query = "SELECT kategorije.ime AS imeKat, kategorije.id AS idKat, naslov, sazetak, tekst, slika_url, arhiva, datum
                 FROM vijesti
                 JOIN kategorije ON kategorije.id = vijesti.idKategorija
-                WHERE vijesti.id = $id_vijest;";
-    $result = mysqli_query($dbc, $query);
+                WHERE vijesti.id = ?;";
+
+    $stmt_vijest = mysqli_stmt_init($dbc);
+    if(mysqli_stmt_prepare($stmt_vijest, $query)){
+        mysqli_stmt_bind_param($stmt_vijest, 'i', $id_vijest);
+        mysqli_stmt_execute($stmt_vijest);
+        mysqli_stmt_store_result($stmt_vijest);
+    }
+    mysqli_stmt_bind_result($stmt_vijest, $vijestKategorijaIme, $vijestKategorijaId, $naslov, $sazetak, $tekst, $pathSlika, $arhiva, $datum);
+    mysqli_stmt_fetch($stmt_vijest);
+
+    /*$result = mysqli_query($dbc, $query);
     $vijest = mysqli_fetch_array($result);
 
     $naslov = $vijest['naslov'];
@@ -79,7 +123,7 @@ if(isset($_GET['id'])){
     $vijestKategorijaIme = $vijest['imeKat'];
     $pathSlika = $vijest['slika_url'];
 
-    $arhiva = $vijest['arhiva'];
+    $arhiva = $vijest['arhiva'];*/
 
     
 
@@ -119,7 +163,7 @@ if(isset($_GET['id'])){
                     <div class="form-item">
                         <div class="form-field">
                             <input type="text" name="ime_kategorije" id="nova_kat"
-                                    maxlength="100" class="form-field-textual" autofocus required>
+                                    maxlength="100" class="form-field-textual" required>
                         </div>
                     </div>
                     <div class="form-item form-actions">
@@ -129,6 +173,7 @@ if(isset($_GET['id'])){
             </form>
         </section>
     <?php else: ?>
+    <!-------Prikaz odabrane vijesti za uređivanje-------------------->
         <div class="form-container">
             <form action="" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $id_vijest ;?>">
