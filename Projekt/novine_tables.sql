@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2026 at 11:04 PM
+-- Generation Time: Jun 14, 2026 at 12:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `novine`
 --
-CREATE DATABASE IF NOT EXISTS `novine` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `novine`;
 
 -- --------------------------------------------------------
 
@@ -29,7 +27,6 @@ USE `novine`;
 -- Table structure for table `kategorije`
 --
 
-DROP TABLE IF EXISTS `kategorije`;
 CREATE TABLE `kategorije` (
   `id` int(11) NOT NULL,
   `ime` varchar(50) NOT NULL
@@ -46,26 +43,9 @@ INSERT INTO `kategorije` (`id`, `ime`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `korisnik`
---
-
-DROP TABLE IF EXISTS `korisnik`;
-CREATE TABLE `korisnik` (
-  `id` int(11) NOT NULL,
-  `ime` varchar(50) NOT NULL,
-  `prezime` varchar(50) NOT NULL,
-  `korisnickoIme` varchar(50) NOT NULL,
-  `lozinka` varchar(255) NOT NULL,
-  `razina` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `vijesti`
 --
 
-DROP TABLE IF EXISTS `vijesti`;
 CREATE TABLE `vijesti` (
   `id` int(11) NOT NULL,
   `naslov` varchar(100) NOT NULL,
@@ -100,13 +80,6 @@ ALTER TABLE `kategorije`
   ADD UNIQUE KEY `id` (`id`,`ime`);
 
 --
--- Indexes for table `korisnik`
---
-ALTER TABLE `korisnik`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `korisnickoIme` (`korisnickoIme`);
-
---
 -- Indexes for table `vijesti`
 --
 ALTER TABLE `vijesti`
@@ -121,19 +94,13 @@ ALTER TABLE `vijesti`
 -- AUTO_INCREMENT for table `kategorije`
 --
 ALTER TABLE `kategorije`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `korisnik`
---
-ALTER TABLE `korisnik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `vijesti`
 --
 ALTER TABLE `vijesti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
