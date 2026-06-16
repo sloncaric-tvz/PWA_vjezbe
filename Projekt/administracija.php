@@ -1,6 +1,16 @@
 <?php
 require_once 'header.php';
 
+if(!isset($_SESSION['admin'])){
+    header('Location: prijava.php');
+} elseif ($_SESSION['admin'] == 0) {
+    echo '<main><div class="form-container">
+            Bok, '.$_SESSION['ime'].'! Nažalost, nemate administratorska prava.
+        </div></main>';
+    include 'footer.php';
+    exit; 
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $id = $_POST['id'];
     if(isset($_POST['update'])){
@@ -110,9 +120,12 @@ if(isset($_GET['id'])){ //pronađi odabranu vijest u bazi
         mysqli_stmt_execute($stmt_vijest);
         mysqli_stmt_store_result($stmt_vijest);
     }
-    mysqli_stmt_bind_result($stmt_vijest, $vijestKategorijaIme, $vijestKategorijaId, $naslov, $sazetak, $tekst, $pathSlika, $arhiva, $datum);
-    mysqli_stmt_fetch($stmt_vijest);
-
+    if(mysqli_stmt_num_rows($stmt_vijest) > 0){
+        mysqli_stmt_bind_result($stmt_vijest, $vijestKategorijaIme, $vijestKategorijaId, $naslov, $sazetak, $tekst, $pathSlika, $arhiva, $datum);
+        mysqli_stmt_fetch($stmt_vijest);
+    } else {
+        header('Location: administracija.php');
+    }
     /*$result = mysqli_query($dbc, $query);
     $vijest = mysqli_fetch_array($result);
 
@@ -133,24 +146,25 @@ if(isset($_GET['id'])){ //pronađi odabranu vijest u bazi
 
 <main>
 <!--Prikaz svih vijesti ako nije odabrana određena koja će se uređivati-->
+    <h2 class="page-title">Administracija</h2>
     <?php if(!isset($_GET['id'])):
             while($kategorija = mysqli_fetch_array($result_kat)):
                 $katId = $kategorija['id'];
-                $query_vijesti = "SELECT id, naslov, sazetak, slika_url, datum
+                $query_vijesti = "SELECT id, naslov, sazetak, slika_url, datum, arhiva
                                 FROM vijesti
                                 WHERE idKategorija=$katId
                                 ORDER BY datum DESC";
                 $result_vijesti = mysqli_query($dbc, $query_vijesti); ?>
                 <hr>
                     <section>
-                        <h2><?= $kategorija['ime']; ?> (EDIT)</h2>
+                        <h2><?= $kategorija['ime']; ?></h2>
                         <?php while($vijest = mysqli_fetch_array($result_vijesti)): ?>
                             <a href="administracija.php?id=<?= $vijest['id']; ?>">
                                 <article>
                                     <div>
                                         <img src="<?= $vijest['slika_url']; ?>" alt="slika za clanak">
                                     </div>
-                                    <h3><?= $vijest['naslov']; ?></h3>
+                                    <h3><?= ($vijest['arhiva']?'<i>(ARHIVIRANO)</i> ':'').$vijest['naslov']; ?></h3>
                                     <p><?= $vijest['sazetak']; ?></p>
                                     <p class="date"><?= $vijest['datum']; ?></p>
                                 </article>
@@ -226,7 +240,7 @@ if(isset($_GET['id'])){ //pronađi odabranu vijest u bazi
                     </div>
                 </div>
                 <div class="form-item form-actions">
-                    <button type="reset" value="Poništi">Poništi</button>
+                    <button type="reset" value="Vrati na staro">Vrati na staro</button>
                     <button type="submit" name="update" value="Prihvati">Prihvati</button>
                     <button type="submit" name="delete" value="Izbriši" class="delete-button">Izbriši</button>
                 </div>

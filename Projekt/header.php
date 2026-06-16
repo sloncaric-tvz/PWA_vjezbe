@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connect.php';
 
 $query = "SELECT id, ime FROM kategorije";
@@ -18,7 +19,7 @@ $result = mysqli_query($dbc, $query);
 <body>
 
     <header>
-        <a href="index.php"><h1>Šokantno.hr</h1></a>
+        <h1><a href="index.php">Šokantno.hr</a></h1>
         <nav>
             <a href="index.php">Home</a>
             <?php while($row = mysqli_fetch_array($result)): ?>
@@ -26,5 +27,10 @@ $result = mysqli_query($dbc, $query);
             <?php endwhile; ?>
             <a href="unos.php">Unos</a>
             <a href="administracija.php">Administracija</a>
+            <?php if(isset($_SESSION['korisnik'])):?>
+                <a href="odjava.php" class="logout-button">Odjava</a>
+            <?php else: ?>
+                <a href="registracija.php">Registracija</a>
+            <?php endif; ?>
         </nav>
     </header>

@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id'])):
     $id_vijest = $_GET['id'];
     $query = "SELECT kategorije.ime AS imeKat, naslov, sazetak, tekst, slika_url, datum
                 FROM vijesti
@@ -13,6 +13,9 @@ if (isset($_GET['id'])) {
         mysqli_stmt_bind_param($stmt, 'i', $id_vijest);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
+    }
+    if(mysqli_stmt_num_rows($stmt) == 0){
+        header('Location: index.php');
     }
     mysqli_stmt_bind_result($stmt, $kategorija, $naslov, $sazetak, $tekst, $pathSlika, $datum);
     mysqli_stmt_fetch($stmt);
@@ -27,7 +30,7 @@ if (isset($_GET['id'])) {
     $pathSlika = $vijest['slika_url'];*/
 
     $slikaDisclaim = "Slika se koristi u svrhe učenja izrade web aplikacija.";
-}
+
 ?>
 
     <main class="article-main">
@@ -57,7 +60,7 @@ if (isset($_GET['id'])) {
             <p class="article-empty">Nema unesenog članka.</p>
         <?php endif; ?>
     </main>
-
+<?php else: header('Location: index.php'); endif; ?>
 <?php
 include 'footer.php';
 ?>

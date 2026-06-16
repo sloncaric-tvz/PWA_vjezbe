@@ -24,9 +24,6 @@ body {
     color: var(--text-color);
     font-family: Georgia, "Times New Roman", serif;
     line-height: 1.2;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
 }
 
 img {
@@ -103,17 +100,12 @@ nav a:focus-visible {
     outline-offset: 4px;
 }
 
-.logout-button {
-    color: red;
-}
-
 /*Main-------------------------------------------------- */
 main {
     width: min(100%, var(--content-width));
     min-height: calc(100vh - 154px);
     margin: 0 auto;
-    padding: 10px var(--content-padding) 62px;
-    /*BILO JE 78px*/
+    padding: 78px var(--content-padding) 62px;
     background: var(--content-background);
 }
 
@@ -186,10 +178,6 @@ article h3 {
     line-height: 1.18;
 }
 
-article h3 i {
-    color: var(--accent-color);
-}
-
 article p {
     font-size: 1rem;
 }
@@ -204,15 +192,10 @@ footer {
     color: #f2f4f5;
     padding: 5px;
     text-align: center;
-    flex: 1;
 }
 
 footer i {
     margin: 5px;
-}
-
-.page-title {
-    text-align: center;
 }
 
 /* unos -------------------------------------------------- */
@@ -347,13 +330,6 @@ textarea.form-field-textual {
     outline: 2px solid var(--accent-color);
     outline-offset: 3px;
 }
-
-.login-warning {
-    line-height: 1.5em;
-    color: red;
-    font-style: italic;
-}
-
 
 /* prikaz članka -------------------------------------------------- */
 .article-main {

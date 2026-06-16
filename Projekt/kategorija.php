@@ -10,6 +10,9 @@ if (isset($_GET['id'])):
         mysqli_stmt_execute($stmt_kat);
         mysqli_stmt_store_result($stmt_kat);
     }
+    if(mysqli_stmt_num_rows($stmt_kat) == 0){
+        header('Location: index.php');
+    }
     mysqli_stmt_bind_result($stmt_kat, $kategorija);
     mysqli_stmt_fetch($stmt_kat);
 
@@ -30,9 +33,9 @@ if (isset($_GET['id'])):
 
 ?>
 <main>
+    <h2 class="page-title"><?= $kategorija; ?></h2>
     <hr>
         <section>
-            <h2><?= $kategorija; ?></h2>
             <?php while(mysqli_stmt_fetch($stmt_vijesti)): ?>
                 <a href="clanak.php?id=<?= $id; ?>">
                     <article>
@@ -48,6 +51,8 @@ if (isset($_GET['id'])):
         </section>
 </main>
 <?php
+else:
+    header('Location: index.php');
 endif;
 
 include 'footer.php';
