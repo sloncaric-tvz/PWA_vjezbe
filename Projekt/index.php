@@ -24,7 +24,7 @@ require_once 'header.php';
             ?>
             <hr>
                 <section>
-                    <h2><?= $kategorija['ime']; ?></h2>
+                    <h2><a href="kategorija.php?id=<?= $katId; ?>" class="section-link"><?= $kategorija['ime']; ?></a></h2>
                     <?php 
                     while(mysqli_stmt_fetch($stmt)): ?>
                         <a href="clanak.php?id=<?= $id; ?>">

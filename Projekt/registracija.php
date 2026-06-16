@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             mysqli_stmt_store_result($stmt);
         }
         if(mysqli_stmt_num_rows($stmt) > 0){ //javi grešku ako je korisničko ime zauzeto
-            $greskaKor = "Korisnicko ime je već zauzeto";
+            $greskaKor = "Korisničko ime je već zauzeto";
         } else {
             $ime = $_POST['ime'];
             $prezime = $_POST['prezime'];
@@ -28,7 +28,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(mysqli_stmt_prepare($stmt, $query)){
                 mysqli_stmt_bind_param($stmt, "ssss", $ime, $prezime, $korisnickoIme, $hash);
                 mysqli_stmt_execute($stmt);
-                header('Location: prijava.php');
+                $_SESSION['ime'] = $ime;
+                $_SESSION['korisnik'] = $korisnickoIme;
+                $_SESSION['admin'] = 0;
+                header('Location: administracija.php');
             }
         }
     }
