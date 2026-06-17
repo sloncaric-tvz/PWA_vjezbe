@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `novine`
 --
+DROP DATABASE IF EXISTS `novine`;
 CREATE DATABASE IF NOT EXISTS `novine` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `novine`;
 
@@ -29,7 +30,6 @@ USE `novine`;
 -- Table structure for table `kategorije`
 --
 
-DROP TABLE IF EXISTS `kategorije`;
 CREATE TABLE `kategorije` (
   `id` int(11) NOT NULL,
   `ime` varchar(50) NOT NULL
@@ -49,7 +49,6 @@ INSERT INTO `kategorije` (`id`, `ime`) VALUES
 -- Table structure for table `korisnik`
 --
 
-DROP TABLE IF EXISTS `korisnik`;
 CREATE TABLE `korisnik` (
   `id` int(11) NOT NULL,
   `ime` varchar(50) NOT NULL,
@@ -72,7 +71,6 @@ INSERT INTO `korisnik` (`id`, `ime`, `prezime`, `korisnickoIme`, `lozinka`, `raz
 -- Table structure for table `vijesti`
 --
 
-DROP TABLE IF EXISTS `vijesti`;
 CREATE TABLE `vijesti` (
   `id` int(11) NOT NULL,
   `naslov` varchar(100) NOT NULL,

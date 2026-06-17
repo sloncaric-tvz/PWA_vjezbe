@@ -1,8 +1,16 @@
 <?php
 include 'header.php';
 
+if(isset($_SESSION['login_redirect'])){
+    $redirect = $_SESSION['login_redirect'];
+    unset($_SESSION['login_redirect']);
+} else {
+    $redirect = "administracija.php";
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $uspjesnaPrijava = false;
+    $redirect = $_POST['redirect'];
 
     $query = "SELECT ime, korisnickoIme, lozinka, razina FROM korisnik WHERE korisnickoIme = ?;";
     $stmt = mysqli_stmt_init($dbc);
@@ -20,7 +28,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $_SESSION['korisnik'] = $korisnickoIme;
             $_SESSION['admin'] = $admin;
 
-            header('Location: administracija.php');
+            if(isset($redirect)){
+                header('Location: ' . $redirect);
+            } else {
+                header('Location: administracija.php');
+            }
         }
     }
 
@@ -29,6 +41,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 <main>
     <div class="form-container">
         <form action="" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="redirect" value="<?= $redirect; ?>">
             <?php if(isset($uspjesnaPrijava) && !$uspjesnaPrijava): ?>
                 <div class = "login-warning">Neispravno korisničko ime ili lozinka.</div>
             <?php endif; ?>

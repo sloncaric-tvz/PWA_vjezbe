@@ -2,6 +2,7 @@
 require_once 'header.php';
 
 if(!isset($_SESSION['admin'])){
+    $_SESSION['login_redirect'] = 'administracija.php';
     header('Location: prijava.php');
 } elseif ($_SESSION['admin'] == 0) {
     echo '<main><div class="form-container">

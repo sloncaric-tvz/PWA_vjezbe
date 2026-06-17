@@ -1,6 +1,10 @@
 <?php
 include 'header.php';
-include 'connect.php';
+
+if(!isset($_SESSION['admin'])){
+    $_SESSION['login_redirect'] = 'unos.php';
+    header('Location: prijava.php');
+}
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $naslov = trim($_POST['naslov'] ?? '');
